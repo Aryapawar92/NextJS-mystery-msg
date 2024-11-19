@@ -20,33 +20,36 @@ function page() {
         <div className="bg-white px-6 py-8 rounded shadow-md text-black w-full">
           <h1 className="mb-8 text-3xl text-center">Sign up</h1>
           <input
+            id="username"
             type="text"
             className="block border border-grey-light w-full p-3 rounded mb-4"
-            name="fullname"
-            placeholder="Full Name"
+            value={user.username}
+            placeholder="Username"
+            onChange={(e) => setUser({ ...user, username: e.target.value })}
           />
 
           <input
+            id="email"
             type="text"
             className="block border border-grey-light w-full p-3 rounded mb-4"
             name="email"
             placeholder="Email"
+            value={user.email}
+            onChange={(e) => setUser({ ...user, email: e.target.value })}
           />
 
           <input
+            id="password"
             type="password"
             className="block border border-grey-light w-full p-3 rounded mb-4"
             name="password"
             placeholder="Password"
-          />
-          <input
-            type="password"
-            className="block border border-grey-light w-full p-3 rounded mb-4"
-            name="confirm_password"
-            placeholder="Confirm Password"
+            value={user.password}
+            onChange={(e) => setUser({ ...user, password: e.target.value })}
           />
 
           <button
+            onClick={onSignup}
             type="submit"
             className="w-full text-center py-3 rounded bg-black text-white hover:bg-green-dark focus:outline-none my-1"
           >
@@ -56,12 +59,12 @@ function page() {
 
         <div className="text-white mt-6">
           Already have an account?
-          <a
+          <Link
             className="no-underline border-b border-blue text-white"
-            href="../login/"
+            href={"/login"}
           >
             Log in
-          </a>
+          </Link>
           .
         </div>
       </div>
