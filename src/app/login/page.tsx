@@ -4,14 +4,37 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import toast from "react-hot-toast";
+import { useEffect } from "react";
 
 function page() {
+  const router = useRouter();
   const [user, setUser] = React.useState({
     email: "",
     password: "",
   });
 
-  const onSignIn = async () => {};
+  const [buttonDisabled, setButtonDisabled] = React.useState(false);
+
+  const onSignIn = async () => {
+    try {
+      await axios.post("/api/users/login", user).then((res) => {
+        toast.success("User logged in successfully");
+        router.push("/profile");
+      });
+    } catch (error: any) {
+      toast.error("Something went wrong");
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (user.email.length > 0 && user.password.length > 0) {
+      setButtonDisabled(true);
+    } else {
+      setButtonDisabled(false);
+    }
+  }, [user]);
 
   return (
     <div className="bg-grey-lighter min-h-screen flex flex-col bg-black">
@@ -44,7 +67,7 @@ function page() {
             type="submit"
             className="w-full text-center py-3 rounded bg-black text-white hover:bg-green-dark focus:outline-none my-1"
           >
-            Sign In
+            {buttonDisabled ? "Sign In" : "Cant Sign In"}
           </button>
         </div>
 

@@ -1,18 +1,45 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 function page() {
+  const router = useRouter();
   const [user, setUser] = React.useState({
     username: "",
     email: "",
     password: "",
   });
 
-  const onSignup = async () => {};
+  const [buttonDisabled, setButtonDisabled] = React.useState(false);
+
+  const onSignup = async () => {
+    try {
+      await axios.post("/api/users/signup", user).then((res) => {
+        toast.success("User created successfully");
+        router.push("/login");
+      });
+    } catch (error: any) {
+      console.log(error);
+
+      toast.error("Something went wrong");
+    }
+  };
+
+  useEffect(() => {
+    if (
+      user.username.length > 0 &&
+      user.email.length > 0 &&
+      user.password.length > 0
+    ) {
+      setButtonDisabled(true);
+    } else {
+      setButtonDisabled(false);
+    }
+  }, [user]);
 
   return (
     <div className="bg-grey-lighter min-h-screen flex flex-col bg-black">
@@ -53,7 +80,7 @@ function page() {
             type="submit"
             className="w-full text-center py-3 rounded bg-black text-white hover:bg-green-dark focus:outline-none my-1"
           >
-            Create Account
+            {buttonDisabled ? "Sign Up" : "Cant Sign Up"}
           </button>
         </div>
 
@@ -62,10 +89,8 @@ function page() {
           <Link
             className="no-underline border-b border-blue text-white"
             href={"/login"}
-          >
-            Log in
-          </Link>
-          .
+          ></Link>
+          Log in Now
         </div>
       </div>
     </div>
