@@ -40,8 +40,8 @@ export async function POST(request: NextRequest) {
 
     // create token
 
-    const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET!, {
-      expiresIn: "1d",
+    const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!, {
+      expiresIn: "10d",
     });
 
     const response = NextResponse.json({
@@ -50,6 +50,9 @@ export async function POST(request: NextRequest) {
     });
     response.cookies.set("token", token, {
       httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // only secure in production
+      maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
+      path: "/",
     });
 
     return response;
